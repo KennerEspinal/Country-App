@@ -4,7 +4,7 @@
   <div class="col">
     <!-- SearchBox -->
     <shared-search-box
-      (onValue)="searchByCountry($event)"
+      (onDebounce)="searchByCountry($event)"
       placeholder="Buscar por País"
     />
   </div>
