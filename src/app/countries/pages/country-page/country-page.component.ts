@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryService } from '../../services/country.service';
 import { switchMap } from 'rxjs';
+import { Country } from '../../interfaces/country';
 
 @Component({
   selector: 'countries-country-page',
@@ -9,6 +10,8 @@ import { switchMap } from 'rxjs';
   styles: ``
 })
 export class CountryPageComponent implements OnInit {
+
+  public country?: Country;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -25,8 +28,7 @@ export class CountryPageComponent implements OnInit {
         if(!country){
           return this.router.navigateByUrl('/countries');
         }
-        console.log('Tenemos un país: ', country);
-        return;
+        return this.country = country;
       })
   }
 
