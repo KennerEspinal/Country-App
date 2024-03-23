@@ -18,7 +18,18 @@ export class CountryService {
 
   private baseUrl = 'https://restcountries.com/v3.1';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.loadFromLocalStorage();
+  }
+
+  private setToLocalStorige() {
+    localStorage.setItem('cacheStore', JSON.stringify(this.cacheStore));
+  }
+
+  private loadFromLocalStorage() {
+    if (!localStorage.getItem('cacheStore')) return;
+    this.cacheStore = JSON.parse(localStorage.getItem('cacheStore')!);
+  }
 
   private getHttpCountry(url: string): Observable<Country[]> {
     return this.http.get<Country[]>(url)
@@ -39,7 +50,8 @@ export class CountryService {
     const url = `${this.baseUrl}/capital/${capital}`;
     return this.getHttpCountry(url)
       .pipe(
-        tap(countries => this.cacheStore.byCapital = { term: capital, countries })
+        tap(countries => this.cacheStore.byCapital = { term: capital, countries }),
+        tap(() => this.setToLocalStorige())
       );
   }
 
@@ -47,7 +59,8 @@ export class CountryService {
     const url = `${this.baseUrl}/name/${name}`;
     return this.getHttpCountry(url)
       .pipe(
-        tap(countries => this.cacheStore.byCountries = { term: name, countries })
+        tap(countries => this.cacheStore.byCountries = { term: name, countries }),
+        tap(() => this.setToLocalStorige())
       );
   }
 
@@ -55,7 +68,8 @@ export class CountryService {
     const url = `${this.baseUrl}/region/${region}`;
     return this.getHttpCountry(url)
       .pipe(
-        tap(countries => this.cacheStore.byRegion = { region, countries })
+        tap(countries => this.cacheStore.byRegion = { region, countries }),
+        tap(() => this.setToLocalStorige())
       );
   }
 
